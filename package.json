@@ -1,0 +1,26 @@
+{
+    "name": "idkMan",
+    "version": "1.0.0",
+    "description": "Tool to preview and install terminal themes",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/estrellar/macos-terminal-themes.git"
+    },
+    "keywords": [
+        "terminal"
+    ],
+    "author": "ryyu&estrellar",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/estrellar/macos-terminal-themes/issues"
+    },
+    "homepage": "https://github.com/estrellar/macos-terminal-themes#readme",
+    "devDependencies": {
+        "electron": "^7.1.9"
+    }
+}
