@@ -22,5 +22,6 @@
     "homepage": "https://github.com/estrellar/macos-terminal-themes#readme",
     "devDependencies": {
         "electron": "^7.1.9"
-    }
+    },
+    "dependencies": {}
 }

@@ -1,9 +1,9 @@
-const {app, BrowserWindow}  = require('electron');
+const {app, BrowserWindow, ipcMain}  = require('electron');
 const fs = require('fs');
-
+const url = require('url');
 let win = null;
 
-function createWindow() {
+function loadWindow() {
     win = new BrowserWindow({
         width: 700,
         height: 800,
@@ -13,25 +13,35 @@ function createWindow() {
     });
 
     win.loadFile('index.html');
-    
     win.webContents.openDevTools();
     
     win.on('closed', () => {
         win = null
     });
-    
 }
 
-app.on('ready', createWindow);
+function getProfiles(){
+    var profiles = [];
+    files = fs.readdirSync(__dirname+'/schemes');
+    for(var i = 0; i < files.length; i++){
+        var profile = {};
+        profile.name = files[i];
+        //profile.plist = ?
+        profile.image_url =url.format({
+            pathname: __dirname+'/screenshots/'
+            +(files[i].toLowerCase().replace(/[^a-z0-9\.]/gi, '_')
+              .replace('.terminal', '.png')),
+            protocol:'file:',
+            slashes: true
+        });
+        profiles.push(profile);
+    }
+    return profiles;
+}
 
-//loop through schemes dir
-fs.readdir('./schemes', (err, dir) => {
-    for(var i = 0; i < dir.length; i++){
-        console.log(dir[i]);
-    }
-});
-app.on('activate', () => {
-    if(win === null){
-        createWindow()
-    }
+
+app.on('ready', loadWindow);
+
+ipcMain.on('index-loaded', (event, args) =>{
+    event.returnValue = getProfiles();
 });
