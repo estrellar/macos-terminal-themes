@@ -40,6 +40,7 @@
     <script>
       const { ipcRenderer }  = require('electron');
        var profiles = ipcRenderer.sendSync('index-loaded','');
+       console.log('profs', profiles);
        // document.addEventListener('DOMContentLoaded', function() {
        //   var elems = document.querySelectorAll('.pushpin');
        //   var instances = M.Pushpin.init(elems, );
@@ -73,7 +74,7 @@
                torep = template.replace(/{id}/g, name)
                    .replace('{name}', prof.name)
                    .replace('{bg-color}', prof.Background)
-                   .replace('{txt-color}', prof.White);
+                   .replace('{txt-color}', prof.Text);
 
                if(name == '3024-Day'){
                    torep = torep.replace('{nav-class}', 'pinned');
