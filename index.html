@@ -2,73 +2,87 @@
 <html>
   <head>
     <title>Profiles</title>
-    
-    <script>!window.jQuery && document.write('<script src="http://code.jquery.com/jquery-1.4.2.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"><\/script>');</script>
 
-                                                                                                                  
-                                                                                                                  
- 
+    <script>
+      !window.jQuery && document.write('<script src="http://code.jquery.com/jquery-1.4.2.min.js"><\/script><script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"><\/script>');
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <style>
-      html, body {
+
+      html, body, .block {
           height: 100%;
       }
-      
+      nav ul li a:hover, nav ul li a.active {
+          background-color: rgba(0,0,0,.1);
+      }
+      footer {
+          padding-left: 0;
+      }
+
       .pin-top {
-          position: relative;
+        position: relative;
       }
-      
-      
+
+      // Class for when element is below threshold
       .pin-bottom {
-          position: relative;
+        position: relative;
       }
-      
-      
+
+      // Class for when element is pinned
       .pinned {
           position: fixed !important;
-      }
-      
-      .block {
-          height: 100%;
-      }
-      
-      .divider {
-          height: 50px;
-      }
+        }
+
+
     </style>
   </head>
   <body>
-    
-    <div id="profile-listing">
-      
-    </div> 
-     <script>
+    <script>
       const { ipcRenderer }  = require('electron');
        var profiles = ipcRenderer.sendSync('index-loaded','');
-
+       document.addEventListener('DOMContentLoaded', function() {
+         var elems = document.querySelectorAll('.pushpin');
+         var instances = M.Pushpin.init(elems);
+       });
        (function() {
-           var listingEl = document.getElementById('profile-listing'); 
-           var template = '<div id="{id}" class="block"><nav class="pushpin-demo-nav pinned" data-target="{id}" style="top: 0px;"><div class="nav-wrapper"><div class="container"><a class="brand-logo">{name}</a><ul id="nav-mobile" class="right hid-on-med-and-down"><li><a>install</a></li></ul></div></div></nav></div>';
+           var listingEl = document.getElementsByTagName('body')[0];
+           var template =  `
+           <div id="{id}" class="block">
+            <nav class="pushpin-demo-nav {nav-class}" data-target="{id}" style="top: 0px; background: {bg-color};">
+              <div class="nav-wrapper">
+                <div class="container">
+                  <a class="brand-logo" style="color: {txt-color};">{name}</a>
+                  <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li>
+                      <a>install</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </nav>
+            <div class="divider"></div>
+            <div class="row">
+              <div class="col l12 m12 s12">
+                <h1 class="center">PLACE TERMINAL HERE?</h1>
+              </div>
+            </div>
+          </div>`;
            for(var i = 0; i < profiles.length; i++){
                prof = profiles[i];
-               console.log(prof)
-               torep = template.replace(/{id}/g, prof.name.replace(/[^a-z0-9\.]/gi, '-'))
-                   .replace('{name}', prof.name);
-               console.log(torep);
+               name = prof.name.replace(/[^a-z0-9\.]/gi, '-')
+               torep = template.replace(/{id}/g, name)
+                   .replace('{name}', prof.name)
+                   .replace('{bg-color}', prof.Background)
+                   .replace('{txt-color}', prof.White);
+
+               if(name == '3024-Day'){
+                   torep = torep.replace('{nav-class}', 'pinned');
+               }else{
+                   torep = torep.replace('{nav-class}', 'pin-top');
+               }
                listingEl.innerHTML += torep;
-               
            }
-           
-           $('.pushpin-demo-nav').each(function() {
-               var $this = $(this);
-               var $target = $('#' + $(this).attr('data-target'));
-               $this.pushpin({
-                   top: $target.offset().top,
-                   bottom: $target.offset().top + $target.outerHeight() - $this.height()
-               });
-           });
-       })();
-     </script>
-    
+         })();
+    </script>
   </body>
 </html>
