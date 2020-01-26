@@ -23,5 +23,7 @@
     "devDependencies": {
         "electron": "^7.1.9"
     },
-    "dependencies": {}
+    "dependencies": {
+        "plist": "^3.0.1"
+    }
 }
