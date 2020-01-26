@@ -40,10 +40,10 @@
     <script>
       const { ipcRenderer }  = require('electron');
        var profiles = ipcRenderer.sendSync('index-loaded','');
-       document.addEventListener('DOMContentLoaded', function() {
-         var elems = document.querySelectorAll('.pushpin');
-         var instances = M.Pushpin.init(elems);
-       });
+       // document.addEventListener('DOMContentLoaded', function() {
+       //   var elems = document.querySelectorAll('.pushpin');
+       //   var instances = M.Pushpin.init(elems, );
+       // });
        (function() {
            var listingEl = document.getElementsByTagName('body')[0];
            var template =  `
@@ -82,6 +82,14 @@
                }
                listingEl.innerHTML += torep;
            }
+           $('.pushpin-demo-nav').each(function() {
+             var $this = $(this);
+             var $target = $('#' + $(this).attr('data-target'));
+             $this.pushpin({
+               top: $target.offset().top,
+               bottom: $target.offset().top + $target.outerHeight() - $this.height()
+             });
+           });
          })();
     </script>
   </body>
