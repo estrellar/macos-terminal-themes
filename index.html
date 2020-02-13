@@ -45,6 +45,10 @@
        //   var elems = document.querySelectorAll('.pushpin');
        //   var instances = M.Pushpin.init(elems, );
        // });
+       function triggerInstall(el)
+       {
+
+       }
        (function() {
            var listingEl = document.getElementsByTagName('body')[0];
            var template =  `
@@ -55,7 +59,7 @@
                   <a class="brand-logo" style="color: {txt-color};">{name}</a>
                   <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li>
-                      <a>install</a>
+                      <a id="{orig_name}" style="color: {txt-color};" onclick="triggerInstall(this)">install</a>
                     </li>
                   </ul>
                 </div>
@@ -71,10 +75,11 @@
            for(var i = 0; i < profiles.length; i++){
                prof = profiles[i];
                name = prof.name.replace(/[^a-z0-9\.]/gi, '-')
-               torep = template.replace(/{id}/g, name)
-                   .replace('{name}', prof.name)
+               torep = template.replace(/{id}/g, name) //replace all instances
+                   .replace('{name}', prof.name) //replaces only 1st instance
                    .replace('{bg-color}', prof.Background)
-                   .replace('{txt-color}', prof.Text);
+                   .replace(/{txt-color}/g, prof.Text)
+                   .replace('{orig_name}', prof.name);
 
                if(name == '3024-Day'){
                    torep = torep.replace('{nav-class}', 'pinned');
