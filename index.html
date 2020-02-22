@@ -47,7 +47,8 @@
        // });
        function triggerInstall(el)
        {
-
+         console.log(el.getAttribute('id'));
+         var res = ipcRenderer.sendSync('install-theme', el.getAttribute('id'));
        }
        (function() {
            var listingEl = document.getElementsByTagName('body')[0];
@@ -59,7 +60,7 @@
                   <a class="brand-logo" style="color: {txt-color};">{name}</a>
                   <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li>
-                      <a id="{orig_name}" style="color: {txt-color};" onclick="triggerInstall(this)">install</a>
+                      <a id="{f_name}" style="color: {txt-color};" onclick="triggerInstall(this)">install</a>
                     </li>
                   </ul>
                 </div>
@@ -79,7 +80,8 @@
                    .replace('{name}', prof.name) //replaces only 1st instance
                    .replace('{bg-color}', prof.Background)
                    .replace(/{txt-color}/g, prof.Text)
-                   .replace('{orig_name}', prof.name);
+                   .replace('{orig_name}', prof.name)
+                   .replace('{f_name}', prof.fname);
 
                if(name == '3024-Day'){
                    torep = torep.replace('{nav-class}', 'pinned');

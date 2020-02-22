@@ -1,10 +1,18 @@
 const {app, BrowserWindow, ipcMain}  = require('electron');
 const fs = require('fs');
 const url = require('url');
-const plist = require('plist')
-const path = require('path')
+const plist = require('plist');
+const path = require('path');
+const exec = require('child_process').exec;
 
+const schemes_dir = __dirname+'/schemes';
 let win = null;
+
+function execute(command, callback) {
+    exec(command, (error, stdout, stderr) => {
+        callback(stdout);
+    });
+};
 
 function loadWindow() {
   win = new BrowserWindow({
@@ -25,10 +33,10 @@ function loadWindow() {
 
 function getProfiles(){
   var profiles = [];
-  files = fs.readdirSync(__dirname+'/schemes');
+  files = fs.readdirSync(schemes_dir);
   for(var i = 0; i < files.length; i++){
-    let properties = plist.parse(fs.readFileSync(path.resolve(__dirname+'/schemes', files[i]), 'utf8'))
-    let theme = { name: properties.name }
+    let properties = plist.parse(fs.readFileSync(path.resolve(schemes_dir, files[i]), 'utf8'))
+    let theme = { name: properties.name, fname: files[i]}
     for (let property in properties) {
       if ((property.startsWith('ANSI') || property.startsWith('Background')) || property.startsWith('Text') && property.includes('Color')) {
         let formattedColor = property.replace('ANSI', '').replace('Color', '')
@@ -65,3 +73,15 @@ app.on('ready', loadWindow);
 ipcMain.on('index-loaded', (event, args) =>{
   event.returnValue = getProfiles();
 });
+
+ipcMain.on('install-theme', (event, args) => {
+  event.returnValue = installTheme(args);
+});
+
+function installTheme(filename){
+  console.log('filename', filename);
+  execute('./schemes/installTheme.sh "'+ schemes_dir + '/' + filename + '"', (output) => {
+      console.log(output);
+  });
+  return 'hi';
+}
