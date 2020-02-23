@@ -8,29 +8,19 @@ const exec = require('child_process').exec;
 const schemes_dir = __dirname+'/schemes';
 let win = null;
 
+/**************************HELPER FUNCTIONS***************************/
+//call bash function
 function execute(command, callback) {
-    exec(command, (error, stdout, stderr) => {
-        callback(stdout);
-    });
+  console.log(command);
+  exec(command, (error, stdout, stderr) => {
+    if(error){
+      console.log('error', error);
+    }
+    callback(stdout);
+  });
 };
 
-function loadWindow() {
-  win = new BrowserWindow({
-    width: 1080,
-    height: 970,
-    webPreferences: {
-      nodeIntegration: true
-    }
-  });
-
-  win.loadFile('index.html');
-  win.webContents.openDevTools();
-
-  win.on('closed', () => {
-    win = null
-  });
-}
-
+//read schemes function and return as objects
 function getProfiles(){
   var profiles = [];
   files = fs.readdirSync(schemes_dir);
@@ -67,9 +57,29 @@ function getProfiles(){
   return profiles;
 }
 
+/************************INITIALIZATION*********************/
+//setup main electron window
+function loadWindow() {
+  win = new BrowserWindow({
+    width: 1080,
+    height: 970,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  win.loadFile('index.html');
+  win.webContents.openDevTools();
+
+  win.on('closed', () => {
+    win = null
+  });
+}
 
 app.on('ready', loadWindow);
 
+
+/*************************LISTENERS***********************/
 ipcMain.on('index-loaded', (event, args) =>{
   event.returnValue = getProfiles();
 });
@@ -79,8 +89,8 @@ ipcMain.on('install-theme', (event, args) => {
 });
 
 function installTheme(filename){
-  console.log('filename', filename);
-  execute('./schemes/installTheme.sh "'+ schemes_dir + '/' + filename + '"', (output) => {
+  var file = schemes_dir + '/' + filename;
+  execute('./tools/installTheme.sh "'+ file + '"', (output) => {
       console.log(output);
   });
   return 'hi';

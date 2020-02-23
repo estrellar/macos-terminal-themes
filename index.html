@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+
     <title>Profiles</title>
 
     <script>
@@ -30,10 +31,88 @@
 
       // Class for when element is pinned
       .pinned {
-          position: fixed !important;
-        }
+        z-index:10;
+        position: fixed !important;
+      }
 
+      .idk {
+        padding-top: 100px;
+        width : 90%;
+        height: 90%;
+        margin: auto;
+      }
 
+      .window-button, .window .buttons .close, .window .buttons .minimize, .window .buttons .maximize {
+        padding: 0;
+        margin: 0;
+        margin-right: 4px;
+        width: 12px;
+        height: 12px;
+        background-color: gainsboro;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 6px;
+        color: rgba(0, 0, 0, 0.5);
+      }
+
+      .window {
+        z-index: -10;
+        margin: auto;
+        width: 640px;
+        height: 90%;
+      }
+      .window .handle {
+        height: 22px;
+        margin:auto;
+        background: linear-gradient(0deg, #d8d8d8, #ececec);
+        border-top: 1px solid white;
+        border-bottom: 1px solid #b3b3b3;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        color: rgba(0, 0, 0, 0.7);
+        font-family: Helvetica, sans-serif;
+        font-size: 13px;
+        line-height: 22px;
+        text-align: center;
+      }
+      .window .buttons {
+        position: absolute;
+        float: left;
+        margin: 0 8px;
+      }
+      .window .buttons .close {
+        background-color: #ff6159;
+      }
+      .window .buttons .minimize {
+        background-color: #ffbf2f;
+      }
+      .window .buttons .maximize {
+        background-color: #25cc3e;
+      }
+      .window .terminal {
+        margin: auto;
+        background-color: black;
+        opacity: 0.7;
+        color: white;
+        height: 100%;
+        font-family: 'Source Code Pro', monospace;
+        font-weight: 200;
+        font-size: 14px;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        overflow-y: auto;
+      }
+      .row{
+        z-index:-10;
+        height: 90%;
+      }
+      .col{
+        height: 80%;
+      }
     </style>
   </head>
   <body>
@@ -69,7 +148,23 @@
             <div class="divider"></div>
             <div class="row">
               <div class="col l12 m12 s12">
-                <h1 class="center">PLACE TERMINAL HERE?</h1>
+                  <div class="idk">
+                  <div class="window">
+                      <div class="handle">
+                          <div class="buttons">
+                              <button class="close">
+                              </button>
+                              <button class="minimize">
+                              </button>
+                              <button class="maximize">
+                              </button>
+                          </div>
+                          <span class="title"></span>
+                      </div>
+                      <div class="terminal"></div>
+                  </div>
+                  </div>
+
               </div>
             </div>
           </div>`;
